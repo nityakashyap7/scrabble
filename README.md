@@ -4,6 +4,7 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
 
 ## Contributors 😎
 - [Nitya Kashyap](https://github.com/nityakashyap7)
+- 
 
 ## 🚀 Setup Instructions (for devs joining the project)
 
@@ -25,7 +26,7 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
                     - node
                     - npm (Node Package Manager)
                     - npx (Node Package Runner)
-    - *for project creator only*: run
+    - *for project creator only (Nitya)*: run
         ```bash
         npm create vite@latest .
         ```
@@ -34,8 +35,9 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
         ```bash
         npm install
         ```
-    - and start the dev server with: 
-        ```bash
-        npm run dev
-        ```
-        to develop and test locally. you'll see sth like `Local:   http://localhost:5173/`. Paste the url into ur browser to see changes as u code (refresh as needed)! 
+3. Start the dev server with: 
+    ```bash
+    npm run dev
+    ```
+    to develop and test locally. you'll see sth like `Local:   http://localhost:5173/`. Paste the url into ur browser to see changes as u code (refresh as needed)! 
+
