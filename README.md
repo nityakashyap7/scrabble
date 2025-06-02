@@ -28,3 +28,12 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
         npm create vite@latest .
         ```
         making sure ur directory is empty **(beware: existing README will be overwritten)**
+    - install all dependencies: 
+        ```bash
+        npm install
+        ```
+    - and start the dev server with: 
+        ```bash
+        npm run dev
+        ```
+        to develop and test locally. you'll see sth like `Local:   http://localhost:5173/`. Paste the url into ur browser to see changes as u code (refresh as needed)! 
