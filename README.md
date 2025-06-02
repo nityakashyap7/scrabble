@@ -7,6 +7,8 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
 
 ## 🚀 Setup Instructions (for devs joining the project)
 
+**NOTE TO ALL CONTRIBUTORS: pls create a separate branch off develop for urself tysmm 🫶🏾**
+
 1. **Clone the repo:**
    ```bash
    git clone https://github.com/your-username/scrabble.git
