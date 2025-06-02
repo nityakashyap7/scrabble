@@ -25,7 +25,7 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
                     - node
                     - npm (Node Package Manager)
                     - npx (Node Package Runner)
-    - *for project creator only*: run
+    - *for project creator only (Nitya)*: run
         ```bash
         npm create vite@latest .
         ```
