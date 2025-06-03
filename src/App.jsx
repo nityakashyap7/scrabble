@@ -24,6 +24,9 @@ function App() {
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+        <p>
+          👩🏾‍💻 Nitya's first edit wowow 🤩 ok now im going back to research work lmao
+        </p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
