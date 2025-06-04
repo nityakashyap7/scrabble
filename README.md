@@ -5,7 +5,7 @@ A casual real-time Scrabble web game built with React and Firebase. Made with lo
 ## Contributors 😎
 - [Nitya Kashyap](https://github.com/nityakashyap7)
 - [Samantha Clapp](https://github.com/sammyCl)
--
+- [Anand Kashyap](https://github.com/hacker19232)
 
 ## 🚀 Setup Instructions (for devs joining the project)
 
