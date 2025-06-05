@@ -47,6 +47,23 @@ class Hand {
         }
     }
 
+    returnTiles() {
+        this.reset()
+        const tiles = this.tiles
+        this.tiles = []
+        return tiles
+    }
+
+    addTile(tile) {
+        for (let i = 0; i < this.placedTiles.length; i++) {
+            if (this.placedTiles[i] == tile) {
+                this.placedTiles.splice(i, 1)
+                this.tiles.push(tile)
+                return
+            }
+        }
+    }
+
     reset() {
         this.tiles.push(...this.placedTiles)
         this.placedTiles = []

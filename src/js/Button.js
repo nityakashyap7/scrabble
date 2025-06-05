@@ -1,11 +1,12 @@
 class Button {
-    constructor(x, y, text, text2, size) {
+    constructor(x, y, l, w, text, text2) {
         this.x = x
         this.y = y
+        this.l = l
+        this.w = w
         this.text = text
         this.text2 = text2
         this.hover = false
-        this.size = size
     }
 
     hovering(x, y) {
@@ -16,8 +17,7 @@ class Button {
     }
 
     clicked(x, y) {
-        const half = this.size/2
-        if (x < this.x-half || x > this.x+half || y < this.y-half || y > this.y+half)
+        if (x < this.x-this.l/2 || x > this.x+this.l/2 || y < this.y-this.w/2 || y > this.y+this.w/2)
             return false
         return true
     }
@@ -28,9 +28,9 @@ class Button {
             c.fillStyle = "gray"
         else
             c.fillStyle = "darkgray"
-        c.fillRect(this.x-this.size/2, this.y-this.size/2, this.size, this.size)
-        c.strokeRect(this.x-this.size/2, this.y-this.size/2, this.size, this.size)
-        c.font = this.size/3 + "px Arial"
+        c.fillRect(this.x-this.l/2, this.y-this.w/2, this.l, this.w)
+        c.strokeRect(this.x-this.l/2, this.y-this.w/2, this.l, this.w)
+        c.font = this.w/3 + "px Arial"
         c.fillStyle = "black"
         c.textAlign = "center"
         if (this.text2) {

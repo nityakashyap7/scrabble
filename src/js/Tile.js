@@ -27,6 +27,10 @@ class Tile {
         this.y = y
     }
 
+    getValue() {
+        return this.value
+    }
+
     clicked(x, y) {
         const half = this.size/2
         if (x < this.x-half || x > this.x+half || y < this.y-half || y > this.y+half)

@@ -64,6 +64,10 @@ class Bag {
         return tile
     }
 
+    returnTiles(tiles) {
+        this.tiles.push(...tiles)
+    }
+
     tilesLeft() {
         return this.tiles.length
     }

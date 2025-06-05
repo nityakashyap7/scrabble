@@ -7,6 +7,24 @@ class Square {
         this.size = size
     }
 
+    wordMult() {
+        if (this.type == "letter")
+            return 1
+        if (this.mult == "double")
+            return 2
+        else
+            return 3
+    }
+
+    letterMult() {
+        if (this.type == "word")
+            return 1
+        if (this.mult == "double")
+            return 2
+        else
+            return 3
+    }
+
     draw(c) {
         c.beginPath()
         if (this.mult == "triple") {

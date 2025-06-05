@@ -32,8 +32,9 @@ const useCanvas = draw => {
     const bag = new Bag(TILE_SIZE)
     const hand = new Hand(TILE_SIZE, bag)
     const board = new Board(TILE_SIZE)
-    const reset = new Button(TILE_SIZE*9, TILE_SIZE*17, "reset", "turn", TILE_SIZE)
-    const end = new Button(TILE_SIZE*11, TILE_SIZE*17, "end", "turn", TILE_SIZE)
+    const reset = new Button(TILE_SIZE*9, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "reset", "turn")
+    const end = new Button(TILE_SIZE*11, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "end", "turn")
+    const exchange = new Button(TILE_SIZE*13.5, TILE_SIZE*17, TILE_SIZE*2, TILE_SIZE, "exchange", "tiles")
 
     //everything here is called every frame so it "draws" frame by frame, animates...
     const draw = (ctx, frameCount) => {
@@ -43,33 +44,43 @@ const useCanvas = draw => {
         hand.draw(ctx)
         reset.draw(ctx)
         end.draw(ctx)
+        exchange.draw(ctx)
     }
 
     //a bunch of event listeners for mouse input, for tile grabbing and buttons...
     let tileGrabbed = null
     const rect = canvas.getBoundingClientRect()
 
+    //mousedown select tile
     addEventListener('mousedown', (event) => {
         tileGrabbed = hand.grabTile(event.clientX-rect.left, event.clientY-rect.top)
+        if (!tileGrabbed)
+            tileGrabbed = board.grabTile(event.clientX-rect.left, event.clientY-rect.top, hand)
     })
 
+    //mousemove drag tile, and hover buttons
     addEventListener('mousemove', (event) => {
         if (tileGrabbed) {
+            hand.alignTiles()
             tileGrabbed.move(event.clientX-rect.left, event.clientY-rect.top)
         }
         reset.hovering(event.clientX-rect.left, event.clientY-rect.top)
         end.hovering(event.clientX-rect.left, event.clientY-rect.top)
+        exchange.hovering(event.clientX-rect.left, event.clientY-rect.top)
     })
 
+    //mouseup release tile
     addEventListener('mouseup', (event) => {
         if (tileGrabbed) {
-            if (board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed))
+            if (board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed)) {
                 hand.placeTile(tileGrabbed)
+            }
             tileGrabbed = null
         }
         hand.alignTiles()
     })
 
+    //click buttons
     addEventListener('click', (event) => {
         if (reset.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
             hand.reset()
@@ -77,8 +88,17 @@ const useCanvas = draw => {
             hand.alignTiles()
         }
         if (end.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
+            if (board.valid()) {
+                hand.drawTiles(bag)
+                board.endTurn()
+                hand.alignTiles()
+            }
+        }
+        if (exchange.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
+            board.reset()
+            const tiles = hand.returnTiles()
             hand.drawTiles(bag)
-            board.endTurn()
+            bag.returnTiles(tiles)
             hand.alignTiles()
         }
     })
