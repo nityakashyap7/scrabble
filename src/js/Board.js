@@ -171,7 +171,6 @@ class Board {
         let wordMult = 1, letterMult = 1
 
         let j = startJ
-        console.log(j)
         while (this.isTileOrPlaced(i, j-1)) {
             j--
         }
