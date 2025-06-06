@@ -75,9 +75,7 @@ const useCanvas = draw => {
     //mouseup release tile
     addEventListener('mouseup', (event) => {
         if (tileGrabbed) {
-            if (board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed)) {
-                hand.placeTile(tileGrabbed)
-            }
+            board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed, hand)
             score.setScore(board.score())
             tileGrabbed = null
         }
@@ -88,8 +86,8 @@ const useCanvas = draw => {
     //click buttons
     addEventListener('click', (event) => {
         if (reset.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
+            board.reset(hand)
             hand.reset()
-            board.reset()
             hand.alignTiles()
             score.setScore(0)
         }
@@ -102,7 +100,7 @@ const useCanvas = draw => {
             }
         }
         if (exchange.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
-            board.reset()
+            board.reset(hand)
             const tiles = hand.returnTiles()
             hand.drawTiles(bag)
             bag.returnTiles(tiles)
