@@ -33,7 +33,7 @@ const useCanvas = draw => {
     const bag = new Bag(TILE_SIZE)
     const hand = new Hand(TILE_SIZE, bag)
     const board = new Board(TILE_SIZE)
-    const score = new Score(TILE_SIZE)
+    const score = new Score(TILE_SIZE, "player1")
     const reset = new Button(TILE_SIZE*9, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "reset", "turn")
     const end = new Button(TILE_SIZE*11, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "end", "turn")
     const exchange = new Button(TILE_SIZE*13.5, TILE_SIZE*17, TILE_SIZE*2, TILE_SIZE, "exchange", "tiles")
@@ -81,6 +81,7 @@ const useCanvas = draw => {
         }
         score.setScore(board.score())
         hand.alignTiles()
+        end.setActive(board.valid())
     })
 
     //click buttons
@@ -92,12 +93,12 @@ const useCanvas = draw => {
             score.setScore(0)
         }
         if (end.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
-            if (board.valid()) {
-                hand.drawTiles(bag)
-                board.endTurn()
-                hand.alignTiles()
-                score.endTurn()
-            }
+            hand.drawTiles(bag)
+            board.endTurn()
+            hand.alignTiles()
+            score.endTurn()
+            if (bag.tilesLeft() < 7)
+                exchange.setActive(false)
         }
         if (exchange.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
             board.reset(hand)
@@ -105,8 +106,9 @@ const useCanvas = draw => {
             hand.drawTiles(bag)
             bag.returnTiles(tiles)
             hand.alignTiles()
-            score.setScore(0)
+            score.endTurn()
         }
+        end.setActive(board.valid())
     })
     
     const render = () => {
