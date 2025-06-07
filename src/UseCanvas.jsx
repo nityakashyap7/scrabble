@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 import Bag from './js/Bag.js'
 import Hand from './js/Hand.js'
 import Board from './js/Board.js'
+import Score from './js/Score.js'
 import Button from './js/Button.js'
 
 //this is organized terribly...
@@ -32,6 +33,7 @@ const useCanvas = draw => {
     const bag = new Bag(TILE_SIZE)
     const hand = new Hand(TILE_SIZE, bag)
     const board = new Board(TILE_SIZE)
+    const score = new Score(TILE_SIZE, "player1")
     const reset = new Button(TILE_SIZE*9, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "reset", "turn")
     const end = new Button(TILE_SIZE*11, TILE_SIZE*17, TILE_SIZE, TILE_SIZE, "end", "turn")
     const exchange = new Button(TILE_SIZE*13.5, TILE_SIZE*17, TILE_SIZE*2, TILE_SIZE, "exchange", "tiles")
@@ -45,6 +47,7 @@ const useCanvas = draw => {
         reset.draw(ctx)
         end.draw(ctx)
         exchange.draw(ctx)
+        score.draw(ctx)
     }
 
     //a bunch of event listeners for mouse input, for tile grabbing and buttons...
@@ -72,35 +75,40 @@ const useCanvas = draw => {
     //mouseup release tile
     addEventListener('mouseup', (event) => {
         if (tileGrabbed) {
-            if (board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed)) {
-                hand.placeTile(tileGrabbed)
-            }
+            board.placeTile(event.clientX-rect.left, event.clientY-rect.top, tileGrabbed, hand)
+            score.setScore(board.score())
             tileGrabbed = null
         }
+        score.setScore(board.score())
         hand.alignTiles()
+        end.setActive(board.valid())
     })
 
     //click buttons
     addEventListener('click', (event) => {
         if (reset.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
+            board.reset(hand)
             hand.reset()
-            board.reset()
             hand.alignTiles()
+            score.setScore(0)
         }
         if (end.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
-            if (board.valid()) {
-                hand.drawTiles(bag)
-                board.endTurn()
-                hand.alignTiles()
-            }
+            hand.drawTiles(bag)
+            board.endTurn()
+            hand.alignTiles()
+            score.endTurn()
+            if (bag.tilesLeft() < 7)
+                exchange.setActive(false)
         }
         if (exchange.clicked(event.clientX-rect.left, event.clientY-rect.top)) {
-            board.reset()
+            board.reset(hand)
             const tiles = hand.returnTiles()
             hand.drawTiles(bag)
             bag.returnTiles(tiles)
             hand.alignTiles()
+            score.endTurn()
         }
+        end.setActive(board.valid())
     })
     
     const render = () => {

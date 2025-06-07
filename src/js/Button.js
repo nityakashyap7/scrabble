@@ -7,6 +7,7 @@ class Button {
         this.text = text
         this.text2 = text2
         this.hover = false
+        this.active = true
     }
 
     hovering(x, y) {
@@ -19,12 +20,18 @@ class Button {
     clicked(x, y) {
         if (x < this.x-this.l/2 || x > this.x+this.l/2 || y < this.y-this.w/2 || y > this.y+this.w/2)
             return false
-        return true
+        return this.active
+    }
+
+    setActive(active) {
+        this.active = active
     }
 
     draw(c) {
         c.beginPath()
-        if (this.hover)
+        if (!this.active)
+            c.fillStyle = "red"
+        else if (this.hover)
             c.fillStyle = "gray"
         else
             c.fillStyle = "darkgray"

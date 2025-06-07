@@ -1,3 +1,4 @@
+import js from '@eslint/js'
 import Square from './Square.js'
 
 class Board {
@@ -8,10 +9,12 @@ class Board {
         this.squares = []
         this.tiles = []
         this.placedTiles = []
+        this.blanks = []
         for (let i = 0; i < 15; i++) {
             this.squares.push(new Array(15).fill(null))
             this.tiles.push(new Array(15).fill(null))
             this.placedTiles.push(new Array(15).fill(null))
+            this.blanks.push(new Array(15).fill(null))
         }
 
         this.squares[0][0] = new Square(this.calcX(0), this.calcY(0), "triple", "word", size)
@@ -88,23 +91,40 @@ class Board {
         return this.y + this.size*y
     }
 
-    placeTile(x, y, tile) {
+    placeTile(x, y, tile, hand) {
         const half = this.size/2
         if (x < this.x-half || x > this.x+half*29 || y < this.y-half || y > this.y+half*29)
-            return false
+            return
         const i = Math.floor((x-this.x+half) / this.size)
         const j = Math.floor((y-this.y+half) / this.size)
-        if (this.tiles[i][j] || this.placedTiles[i][j])
-            return false
-        this.placedTiles[i][j] = tile
+        if (this.tiles[i][j]) {
+            if (this.tiles[i][j].getValue() == 0) {
+                hand.addTile(this.tiles[i][j])
+                this.tiles[i][j] = tile
+            } else {
+                return
+            }
+        } else if (this.placedTiles[i][j]) {
+            hand.addTile(this.placedTiles[i][j])
+            this.placedTiles[i][j] = tile
+        } else {
+            this.placedTiles[i][j] = tile
+        }
         tile.move(this.calcX(i), this.calcY(j))
-        return true
+        hand.placeTile(tile)
     }
 
-    reset() {
-        for (let i = 0; i < 15; i++)
-            for (let j = 0; j < 15; j++)
+    reset(hand) {
+        for (let i = 0; i < 15; i++) {
+            for (let j = 0; j < 15; j++) {
                 this.placedTiles[i][j] = null
+                if (this.blanks[i][j]) {
+                    hand.purgeTile(this.blanks[i][j])
+                    this.blanks[i][j].move(this.calcX(i), this.calcY(j))
+                    this.tiles[i][j] = this.blanks[i][j]
+                }
+            }
+        }
     }
 
     score() {
@@ -114,9 +134,11 @@ class Board {
         let column = -1, row = -1
         let startI = -1, startJ = -1
         let endI = -1, endJ = -1
+        let numTiles = 0
         for (let i = 0; i < 15; i++) {
             for (let j = 0; j < 15; j++) {
                 if (this.placedTiles[i][j]) {
+                    numTiles++
                     if (column == -1 && row == -1) {
                         column = startI = i;
                         row = startJ = j;
@@ -136,11 +158,13 @@ class Board {
             }
         }
         //zero tiles case
-        if (column == -1 && row == -1) {
+        if (numTiles == 0)
             return 0
-        }
         //words
         let score = 0
+        //bingo!
+        if (numTiles == 7)
+            score += 50
         let i = startI, j = startJ
         if (column != -1) {
             score += this.scoreColumn(i, j)
@@ -171,7 +195,6 @@ class Board {
         let wordMult = 1, letterMult = 1
 
         let j = startJ
-        console.log(j)
         while (this.isTileOrPlaced(i, j-1)) {
             j--
         }
@@ -289,12 +312,18 @@ class Board {
     }
 
     endTurn() {
-        for (let i = 0; i < 15; i++)
-            for (let j = 0; j < 15; j++)
+        for (let i = 0; i < 15; i++) {
+            for (let j = 0; j < 15; j++) {
                 if (this.placedTiles[i][j]) {
                     this.tiles[i][j] = this.placedTiles[i][j]
                     this.placedTiles[i][j] = null
                 }
+                if (this.tiles[i][j] && this.tiles[i][j].getValue() == 0)
+                    this.blanks[i][j] = this.tiles[i][j]
+                else
+                    this.blanks[i][j] = null
+            }
+        }
     }
 
     grabTile(x, y, hand) {

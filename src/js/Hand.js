@@ -47,6 +47,15 @@ class Hand {
         }
     }
 
+    purgeTile(tile) {
+        for (let i = 0; i < this.tiles.length; i++) {
+            if (this.tiles[i] == tile) {
+                this.tiles.splice(i, 1)
+                return
+            }
+        }
+    }
+
     returnTiles() {
         this.reset()
         const tiles = this.tiles
@@ -58,10 +67,10 @@ class Hand {
         for (let i = 0; i < this.placedTiles.length; i++) {
             if (this.placedTiles[i] == tile) {
                 this.placedTiles.splice(i, 1)
-                this.tiles.push(tile)
-                return
+                break
             }
         }
+        this.tiles.push(tile)
     }
 
     reset() {
