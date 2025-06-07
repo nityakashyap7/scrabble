@@ -1,16 +1,29 @@
 class Tile {
-    constructor(letter, value, size) {
+    constructor(letter, value, size, image) {
         this.x = 0
         this.y = 0
         this.letter = letter
         this.value = value
         this.size = size
+        this.image = image
     }
 
     draw(c) {
         c.beginPath()
-        c.fillStyle = "burlywood"
-        c.fillRect(this.x-this.size/2, this.y-this.size/2, this.size, this.size)
+        // render the tile background
+        if (this.image && this.image.complete) {
+            c.drawImage(
+                this.image,
+                this.x - this.size/2,
+                this.y - this.size/2,
+                this.size,
+                this.size
+            );
+        } else {
+            c.fillStyle = "burlywood"
+            c.fillRect(this.x-this.size/2, this.y-this.size/2, this.size, this.size)
+        }
+        // everything else
         c.font = this.size*2/3 + "px Arial"
         c.fillStyle = "black"
         c.textAlign = "center"
