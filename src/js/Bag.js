@@ -1,8 +1,4 @@
 import Tile from './Tile.js'
-import woodBg1 from '../assets/scrabble_wood_tile.png'
-import woodBg2 from '../assets/scrabble_wood_tile_2.png'
-import woodBg3 from '../assets/scrabble_wood_tile_3.png'
-import woodBg4 from '../assets/scrabble_wood_tile_4.png'
 
 class Bag {
     constructor(size) {
@@ -54,8 +50,9 @@ class Bag {
     }
 
     pickRandomBackground() {
-        const backgrounds = [woodBg1, woodBg2, woodBg3, woodBg4]
-        return backgrounds[Math.floor(Math.random() * backgrounds.length)]
+        // let img = new Image()
+        // img.src = 'src/assets/scrabble_wood_tile.png'
+        return null
     }
 
 
